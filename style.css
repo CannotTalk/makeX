@@ -1,0 +1,220 @@
+@font-face {
+    font-family: 'cc-ultimatum';
+    src: url('fonts/cc-ultimatum-bold-italic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'cinecaption';
+    src: url('fonts/cinecaption226.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'keifont';
+    src: url('fonts/keifont.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: 'tegakikakutto';
+    src: url('fonts/851H-kktt_004.ttf') format('truetype');
+}
+
+@keyframes ripple {
+    0% {box-shadow: 0 0 0 0 lime;}
+    70% {box-shadow: 0 0 0 1rem rgb(27 133 251 / 0%);}
+    100% {box-shadow: 0 0 0 0 rgb(27 133 251 / 0%);}
+}
+
+body {
+    font-family: 'cc-ultimatum', 'tegakikakutto', serif;
+    font-size: 16px;
+    color: lime;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    border-left: lime 10px solid;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    font-family: 'cc-ultimatum', serif;
+    font-size: 2em;
+    color: lime;
+    margin-top: 20px;
+}
+
+#numbers-container {
+    font-size: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+#generate-button-container{
+    text-align: center;
+}
+
+#generate-button {
+    background-color: black;
+    font-size: 250%;
+    font-family: 'cc-ultimatum';
+    text-align: center;
+    color: lime;
+    padding: 0.5rem 25%;
+    margin: 10px;
+    border: 5px lime solid;
+}
+
+#generate-button:hover {
+    color: black;
+    background-color: lime;
+    -webkit-animation: pulse 2s infinite;
+    animation: ripple 1.5s infinite;
+}
+
+#generate-button:active{
+    scale: 0.99;
+}
+
+#answer-button-container{
+    text-align: center;
+}
+
+
+#answer-button{
+    background-color: black;
+    font-size: 30px;
+    font-family: 'cc-ultimatum';
+    text-align: center;
+    white-space: nowrap;
+    color: lime;
+    padding:  0.5rem 10%;
+    margin: 10px;
+    border: 4px lime solid;
+}
+
+#answer-button:hover {
+    -webkit-animation: pulse 1s infinite;
+    animation: ripple 2.5s infinite;
+}
+
+#make10answer{
+    background-color: black;
+    font-size: 50px;
+    font-family: 'cc-ultimatum';
+    text-align: center;
+    color: red;
+    padding: 0.5rem 10%;
+    margin: 10px;
+    margin-bottom: 5px; /* ボタンと回答テキストの間にスペース */
+}
+
+/* style.css に以下を追加 */
+
+#timer-container {
+    text-align: center;
+    font-size: 2em; /* 少し大きく */
+    margin-bottom: 15px;
+    font-family: 'tegakikakutto', 'cc-ultimatum', serif; /* 等幅フォント変更 */
+    color: lime;
+}
+
+#stop-button-container {
+  text-align: center;
+  margin-top: 10px;
+  /* display: none; はHTMLのインラインスタイルまたはJSで制御 */
+}
+
+#stop-button {
+    background-color: black;
+    font-size: 30px;
+    font-family: 'cc-ultimatum';
+    text-align: center;
+    white-space: nowrap;
+    color: red;
+    padding:  0.5rem 10%;
+    margin: 10px;
+    border: 4px red solid;
+}
+
+#stop-button:hover {
+    background-color: red; /* ホバー時少し暗く */
+    color: black;
+}
+
+/* ボタンコンテナ間のマージン調整 (任意) */
+#generate-button-container,
+#stop-button-container,
+#answer-button-container {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* 回答表示エリアのスタイル */
+#solution-display {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 50px;
+    color: #ff0000; /* 青色系 */
+    min-height: 1.5em; /* スペース確保 */
+}
+
+/* 回答ボタンをSolution Ex.と回答テキストの間に置きたい場合など調整 */
+#answer-button-container {
+    display: flex; /* 中央揃えにしやすくする */
+    flex-direction: column; /* 縦に並べる */
+    text-align: center; /* 中央揃え */
+}
+
+
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #a0a0a0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1s ease;
+}
+
+.progress-container {
+    width: 100%;
+    max-width: 400px;
+    height: 20px;
+    background-color: #000000;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 10px;
+    transition: width 0.3s ease-out;
+}
+
+#progress-text {
+    font-size: 100%;
+    color: black
+}
+
+#loading.loaded {
+    opacity: 0;
+}
+
+footer {
+    position: sticky;
+    text-align: center;
+    font-size: 200%;
+    color: purple;
+    padding: 10px;
+}
