@@ -20,18 +20,12 @@ const solutionDisplay = document.getElementById('solution-display');
 
 // --- Helper Functions ---
 
-/**
- * Generates a random integer within the specified range.
- */
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/**
- * Shuffles an array (Fisher-Yates algorithm).
- */
 function shuffleArray(array) {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -41,9 +35,6 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-/**
- * Performs a calculation with two numbers and an operator.
- */
 function calculate(a, b, op) {
     switch (op) {
         case '+': return a + b;
@@ -56,11 +47,121 @@ function calculate(a, b, op) {
     }
 }
 
-/**
- * Generates a solvable MakeX puzzle and one of its solutions.
- */
-function generateSolvableMakeXPuzzle() {
-    const MAX_ATTEMPTS = 100;
+function generateSolvableMakeXPuzzle(targetValue = 10) {
+    const MAX_ATTEMPTS_OUTER = 100;
+    const MAX_ATTEMPTS_INNER = 50;
+    const operators = ['+', '-', '*', '/'];
+
+    for (let outerAttempt = 0; outerAttempt < MAX_ATTEMPTS_OUTER; outerAttempt++) {
+        const initialNumbers = Array.from({ length: 4 }, () => getRandomInt(1, 9));
+        const permutations = getAllPermutations(initialNumbers);
+        const opCombinations = getAllOperatorCombinations(operators);
+
+        for (const nums of permutations) {
+            for (const ops of opCombinations) {
+                let res1 = calculate(nums[0], nums[1], ops[0]);
+                if (res1 === null) continue;
+                let res2 = calculate(res1, nums[2], ops[1]);
+                if (res2 === null) continue;
+                let finalRes = calculate(res2, nums[3], ops[2]);
+                if (finalRes === targetValue) {
+                    return {
+                        numbers: initialNumbers.sort((a, b) => a - b),
+                        target: targetValue,
+                        solutionExpression: `((${nums[0]} ${ops[0]} ${nums[1]}) ${ops[1]} ${nums[2]}) ${ops[2]} ${nums[3]}`,
+                    };
+                }
+
+                res1 = calculate(nums[1], nums[2], ops[1]);
+                if (res1 === null) continue;
+                res2 = calculate(nums[0], res1, ops[0]);
+                if (res2 === null) continue;
+                finalRes = calculate(res2, nums[3], ops[2]);
+                if (finalRes === targetValue) {
+                    return {
+                        numbers: initialNumbers.sort((a, b) => a - b),
+                        target: targetValue,
+                        solutionExpression: `(${nums[0]} ${ops[0]} (${nums[1]} ${ops[1]} ${nums[2]})) ${ops[2]} ${nums[3]}`,
+                    };
+                }
+
+                res1 = calculate(nums[1], nums[2], ops[1]);
+                if (res1 === null) continue;
+                res2 = calculate(res1, nums[3], ops[2]);
+                if (res2 === null) continue;
+                finalRes = calculate(nums[0], res2, ops[0]);
+                if (finalRes === targetValue) {
+                    return {
+                        numbers: initialNumbers.sort((a, b) => a - b),
+                        target: targetValue,
+                        solutionExpression: `${nums[0]} ${ops[0]} ((${nums[1]} ${ops[1]} ${nums[2]}) ${ops[2]} ${nums[3]})`,
+                    };
+                }
+
+                res1 = calculate(nums[0], nums[1], ops[0]);
+                if (res1 === null) continue;
+                res2 = calculate(nums[2], nums[3], ops[2]);
+                if (res2 === null) continue;
+                finalRes = calculate(res1, res2, ops[1]);
+                if (finalRes === targetValue) {
+                    return {
+                        numbers: initialNumbers.sort((a, b) => a - b),
+                        target: targetValue,
+                        solutionExpression: `(${nums[0]} ${ops[0]} ${nums[1]}) ${ops[1]} (${nums[2]} ${ops[2]} ${nums[3]})`,
+                    };
+                }
+
+                res1 = calculate(nums[2], nums[3], ops[2]);
+                if (res1 === null) continue;
+                res2 = calculate(nums[1], res1, ops[1]);
+                if (res2 === null) continue;
+                finalRes = calculate(nums[0], res2, ops[0]);
+                if (finalRes === targetValue) {
+                    return {
+                        numbers: initialNumbers.sort((a, b) => a - b),
+                        target: targetValue,
+                        solutionExpression: `${nums[0]} ${ops[0]} (${nums[1]} ${ops[1]} (${nums[2]} ${ops[2]} ${nums[3]}))`,
+                    };
+                }
+            }
+        }
+    }
+
+    console.warn(`Could not generate a puzzle for target ${targetValue} after ${MAX_ATTEMPTS_OUTER} attempts. Generating any solvable puzzle.`);
+    return generateAnySolvablePuzzleFallback();
+}
+
+function getAllPermutations(arr) {
+    const result = [];
+    function permute(currentArr, remainingArr) {
+        if (remainingArr.length === 0) {
+            result.push(currentArr);
+            return;
+        }
+        for (let i = 0; i < remainingArr.length; i++) {
+            const nextCurrent = currentArr.concat(remainingArr[i]);
+            const nextRemaining = remainingArr.slice(0, i).concat(remainingArr.slice(i + 1));
+            permute(nextCurrent, nextRemaining);
+        }
+    }
+    permute([], arr);
+    return result;
+}
+
+function getAllOperatorCombinations(ops) {
+    const combinations = [];
+    for (let i = 0; i < ops.length; i++) {
+        for (let j = 0; j < ops.length; j++) {
+            for (let k = 0; k < ops.length; k++) {
+                combinations.push([ops[i], ops[j], ops[k]]);
+            }
+        }
+    }
+    return combinations;
+}
+
+function generateAnySolvablePuzzleFallback() {
+    const MAX_ATTEMPTS = 50;
     const operators = ['+', '-', '*', '/'];
 
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
@@ -86,14 +187,14 @@ function generateSolvableMakeXPuzzle() {
 
                 for (const op of shuffledOps) {
                     result = calculate(num1, num2, op);
-                    if (result !== null) {
+                    if (result !== null && Number.isInteger(result) && result >= 0) {
                         newExpression = `(${expr1} ${op} ${expr2})`;
                         calculationSucceeded = true;
                         break;
                     }
                     if (!calculationSucceeded && (op === '-' || op === '/')) {
                         result = calculate(num2, num1, op);
-                        if (result !== null) {
+                        if (result !== null && Number.isInteger(result) && result >= 0) {
                             newExpression = `(${expr2} ${op} ${expr1})`;
                             calculationSucceeded = true;
                             break;
@@ -119,19 +220,16 @@ function generateSolvableMakeXPuzzle() {
 
         if (Number.isInteger(target) && target > 0) {
             return {
-                numbers: initialNumbers,
+                numbers: initialNumbers.sort((a, b) => a - b),
                 target: target,
                 solutionExpression: solutionExpression,
             };
         }
     }
-    console.error(`Failed to generate a valid puzzle after ${MAX_ATTEMPTS} attempts.`);
+    console.error(`Fallback Failed: Could not generate any solvable puzzle after ${MAX_ATTEMPTS} attempts.`);
     return null;
 }
 
-/**
- * Removes unnecessary outer parentheses from an expression string.
- */
 function removeRedundantOuterParentheses(expr) {
     if (typeof expr !== 'string') return expr;
     expr = expr.trim();
@@ -141,16 +239,21 @@ function removeRedundantOuterParentheses(expr) {
         if (innerExpr === '') return expr;
 
         let balance = 0;
-        let valid = true;
+        let splitPoint = -1;
         for (let i = 0; i < innerExpr.length; i++) {
             if (innerExpr[i] === '(') balance++;
             else if (innerExpr[i] === ')') balance--;
-            if (balance < 0) {
-                 valid = false;
-                 break;
+            if (balance === 0 && i < innerExpr.length - 1) {
+                const nextChar = innerExpr[i + 1]?.trim();
+                if (['+', '-', '*', '/'].includes(nextChar)) {
+                    splitPoint = i + 1;
+                    break;
+                }
             }
+            if (balance < 0) break;
         }
-        if (balance === 0 && valid) {
+
+        if (balance === 0 && splitPoint === -1) {
             expr = innerExpr;
         } else {
             break;
@@ -161,9 +264,6 @@ function removeRedundantOuterParentheses(expr) {
 
 // --- Timer Functions ---
 
-/**
- * Formats time into HH:MM:SS.msms format.
- */
 function formatTime(milliseconds) {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const ms = String(Math.floor((milliseconds % 1000) / 10)).padStart(2, '0');
@@ -173,18 +273,12 @@ function formatTime(milliseconds) {
     return `${hours}:${minutes}:${seconds}.${ms}`;
 }
 
-/**
- * Updates the timer display.
- */
 function updateTimer() {
     const now = Date.now();
     elapsedTime = now - startTime;
     timerDisplay.textContent = formatTime(elapsedTime);
 }
 
-/**
- * Starts the timer.
- */
 function startTimer() {
     if (timerInterval) {
         clearInterval(timerInterval);
@@ -192,18 +286,16 @@ function startTimer() {
     startTime = Date.now();
     elapsedTime = 0;
     timerDisplay.textContent = formatTime(0);
-    timerInterval = setInterval(updateTimer, 10);
+    timerInterval = setInterval(updateTimer, 41);
 
     generateButtonContainer.style.display = 'none';
     stopButtonContainer.style.display = 'block';
     answerButton.disabled = false;
+    answerButtonContainer.style.display = 'block';
     answerButton.style.display = 'inline-block';
     solutionDisplay.textContent = '';
 }
 
-/**
- * Stops the timer.
- */
 function stopTimer() {
     if (timerInterval) {
         clearInterval(timerInterval);
@@ -216,24 +308,21 @@ function stopTimer() {
 
 // --- Main Logic Functions ---
 
-/**
- * Generates and displays a puzzle.
- */
 function generateQ() {
     console.log("Generating puzzle...");
-    puzzle = generateSolvableMakeXPuzzle();
+    puzzle = generateSolvableMakeXPuzzle(10);
 
     if (puzzle) {
         console.log("Puzzle generated:", puzzle);
-        let nums = puzzle.numbers;
+        let nums = puzzle.numbers.sort((a, b) => a - b);
         let numsForDisplay = nums.join(' , ') + ` to make ${puzzle.target}`;
 
-        puzzleAnswer = puzzle.solutionExpression;
-        puzzleAnswer = removeRedundantOuterParentheses(puzzleAnswer);
+        puzzleAnswer = removeRedundantOuterParentheses(puzzle.solutionExpression);
 
         numbersDisplay.textContent = numsForDisplay;
 
         solutionDisplay.textContent = '';
+        answerButtonContainer.style.display = 'block';
         answerButton.style.display = 'inline-block';
         answerButton.disabled = false;
 
@@ -241,21 +330,24 @@ function generateQ() {
         console.error("Failed to generate a puzzle.");
         numbersDisplay.textContent = "Error: Could not generate a puzzle.";
         puzzleAnswer = null;
+        answerButtonContainer.style.display = 'none';
         answerButton.style.display = 'none';
+        answerButton.disabled = true;
+        stopTimer();
+        generateButtonContainer.style.display = 'block';
+        stopButtonContainer.style.display = 'none';
     }
     console.log("generateQ finished.");
 }
 
-/**
- * Displays the solution.
- */
 function showAnswer() {
     console.log("Showing answer...");
     if (puzzleAnswer) {
-        solutionDisplay.textContent = puzzleAnswer;
+        solutionDisplay.textContent = puzzleAnswer + ` = ${puzzle.target}`;
         answerButton.style.display = 'none';
+        answerButton.disabled = true;
     } else {
-        console.log("No solution generated.");
+        console.log("No solution available to show.");
         solutionDisplay.textContent = "No solution available.";
     }
     console.log("Answer displayed.");
@@ -266,7 +358,7 @@ function showAnswer() {
 generateButton.addEventListener('click', () => {
     generateQ();
     if (puzzle) {
-      startTimer();
+        startTimer();
     }
 });
 
@@ -279,13 +371,27 @@ answerButton.addEventListener('click', () => {
     stopTimer();
 });
 
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        if (generateButtonContainer.style.display !== 'none') {
+            console.log("Enter pressed, triggering Generate button.");
+            generateButton.click();
+        } else if (stopButtonContainer.style.display !== 'none') {
+            console.log("Enter pressed, triggering Stop button.");
+            stopButton.click();
+        }
+    }
+});
+
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded. Initializing Make 10.");
     timerDisplay.textContent = formatTime(0);
     stopButtonContainer.style.display = 'none';
+    answerButtonContainer.style.display = 'none';
     answerButton.style.display = 'none';
     answerButton.disabled = true;
     solutionDisplay.textContent = '';
-    numbersDisplay.textContent = "? ? ? ?";
+    numbersDisplay.textContent = "? , ? , ? , ? to make ?";
 });
