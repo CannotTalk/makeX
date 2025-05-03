@@ -14,6 +14,15 @@
         <p id="progress-text">0%</p>
     </div>
 
+    <!-- Achievement Popup Structure -->
+    <div id="achievement-popup" class="achievement-popup hidden">
+        <div class="achievement-content">
+        <strong class="achievement-title">The Shortcuts Key Nobody Knows</strong>
+        <p class="achievement-desc">Discover a new shortcut key.</p>
+        </div>
+    </div>
+
+<main>
     <h1>Welcome to Make X</h1>
     
     <div id="timer-container">
@@ -21,7 +30,7 @@
     </div>
 
     <div id="numbers-container">
-        <span id="numbers"></span>
+        <span id="numbers">? ? ? ?</span>
     </div>
 
     <div id="generate-button-container">
@@ -32,14 +41,18 @@
     </div>
 
     <div id="answer-button-container">
-        <span id="make10answer"><button id="answer-button">Solution Ex.</button></span>
+        <span id="make10answer">
+            <button id="answer-button">Solution Ex.</button>
+        </span>
         <div id="solution-display" style="margin-top: 5px;"></div>
     </div>
+</main>
 </body>
 <footer>
     <div id="footer">
         <p>&copy; 2025 Make 10 Game By CannotTalk</p>
     </div>
 <script src="scripts/make10.js"></script>
+<script src="scripts/popup-achievements.js"></script>
 <script src="scripts/loading.js"></script>
 </html>
