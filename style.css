@@ -250,10 +250,10 @@ footer {
 
 .achievement-popup {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 0px;
+    right: 0px;
     width: 300px;
-    background-color: #0e141b;
+    background-color: #000040;
     color: #dcdedf;
     border-radius: 3px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
