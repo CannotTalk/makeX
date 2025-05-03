@@ -9,9 +9,11 @@ let elapsedTime = 0;
 
 // --- References to DOM Elements ---
 const timerDisplay = document.getElementById('timer');
+const generateButtonContainer = document.getElementById('generate-button-container');
 const generateButton = document.getElementById('generate-button');
 const stopButtonContainer = document.getElementById('stop-button-container');
 const stopButton = document.getElementById('stop-button');
+const answerButtonContainer = document.getElementById('answer-button-container');
 const answerButton = document.getElementById('answer-button');
 const numbersDisplay = document.getElementById('numbers');
 const solutionDisplay = document.getElementById('solution-display');
@@ -192,6 +194,7 @@ function startTimer() {
     timerDisplay.textContent = formatTime(0);
     timerInterval = setInterval(updateTimer, 10);
 
+    generateButtonContainer.style.display = 'none';
     stopButtonContainer.style.display = 'block';
     answerButton.disabled = false;
     answerButton.style.display = 'inline-block';
@@ -207,6 +210,7 @@ function stopTimer() {
         updateTimer();
         timerInterval = null;
         stopButtonContainer.style.display = 'none';
+        generateButtonContainer.style.display = 'block';
     }
 }
 
