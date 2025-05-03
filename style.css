@@ -42,7 +42,8 @@ body {
     color: lime;
     background-color: black;
     margin: 0;
-    padding: 0 1rem;
+    /* padding: 0 1rem; ← 元の設定 */
+    padding: 0 0 0 1rem; /* 右側のパディングを削除 */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -60,7 +61,7 @@ h1 {
     color: lime;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-right: 0;
+    margin-right: 0; /* bodyの右paddingがなくなったので、これも不要なら削除してもよい */
 }
 
 #numbers-container {
@@ -168,7 +169,7 @@ h1 {
     margin-bottom: 10px;
     position: relative;
     z-index: 1;
-    display: none;
+    display: none; /* 初期状態は非表示 */
 }
 
 #stop-button {
@@ -236,22 +237,20 @@ h1 {
 }
 
 footer {
-    width: 100%;
+    width: 100%; /* bodyのpadding調整に伴い、widthを100%に戻す */
     margin-top: auto;
     text-align: center;
     font-size: 200%;
     color: purple;
-    padding: 10px 0;
+    padding: 10px 0; /* 左右のpaddingは不要 */
     background-color: black;
-    position: relative;
-    left: -1rem;
-    width: calc(100% + 2rem);
+    /* position, left, width の調整を削除 */
 }
 
 .achievement-popup {
     position: fixed;
     bottom: 0px;
-    right: 0px;
+    right: 0px; /* bodyの右paddingがなくなったため、これで右端に配置される */
     width: 300px;
     background-color: #000040;
     color: #dcdedf;
