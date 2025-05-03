@@ -18,10 +18,16 @@
     src: url('fonts/851H-kktt_004.ttf') format('truetype');
 }
 
-@keyframes ripple {
+@keyframes ripple-green {
     0% {box-shadow: 0 0 0 0 lime;}
     70% {box-shadow: 0 0 0 1rem rgb(27 133 251 / 0%);}
     100% {box-shadow: 0 0 0 0 rgb(27 133 251 / 0%);}
+}
+
+@keyframes ripple-red {
+    0% {box-shadow: 0 0 0 0 red;}
+    70% {box-shadow: 0 0 0 1rem rgb(255 0 0 / 0%);}
+    100% {box-shadow: 0 0 0 0 rgb(255 0 0 / 0%);}
 }
 
 body {
@@ -71,7 +77,7 @@ h1 {
     color: black;
     background-color: lime;
     -webkit-animation: pulse 2s infinite;
-    animation: ripple 1.5s infinite;
+    animation: ripple-green 1.5s infinite;
 }
 
 #generate-button:active{
@@ -97,7 +103,7 @@ h1 {
 
 #answer-button:hover {
     -webkit-animation: pulse 1s infinite;
-    animation: ripple 2.5s infinite;
+    animation: ripple-green 2.5s infinite;
 }
 
 #make10answer{
@@ -137,6 +143,9 @@ h1 {
     padding:  0.5rem 10%;
     margin: 10px;
     border: 4px red solid;
+    -webkit-animation: pulse 2s infinite;
+    animation: ripple-red 1.5s infinite;
+    
 }
 
 #stop-button:hover {
