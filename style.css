@@ -1,3 +1,10 @@
+/* Reset and base styles */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 @font-face {
     font-family: 'cc-ultimatum';
     src: url('fonts/cc-ultimatum-bold-italic.otf') format('opentype');
@@ -36,17 +43,25 @@ body {
     color: lime;
     background-color: black;
     margin: 0;
-    padding: 0;
+    padding: 0 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1;
 }
 
 h1 {
     border-left: lime 10px solid;
-    margin-left: 1rem;
     padding-left: 1rem;
     font-family: 'cc-ultimatum', serif;
     font-size: 2em;
     color: lime;
     margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 0;
 }
 
 #numbers-container {
@@ -66,8 +81,7 @@ h1 {
 #generate-button,
 #stop-button {
     display: block;
-    box-sizing: border-box;
-    width: 70%;
+    width: 90%;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
@@ -113,9 +127,11 @@ h1 {
     text-align: center;
     white-space: nowrap;
     color: lime;
-    padding: 0.5rem 10%;
-    margin: 10px;
+    padding: 0.5rem 2rem;
+    margin: 10px 0;
     border: 4px lime solid;
+    width: auto;
+    max-width: 100%;
 }
 
 #answer-button:hover {
@@ -128,9 +144,12 @@ h1 {
     font-family: 'cc-ultimatum';
     text-align: center;
     color: red;
-    padding: 0.5rem 10%;
-    margin: 10px;
+    padding: 0.5rem 1rem;
+    margin: 10px 0;
     margin-bottom: 5px;
+    width: auto;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 #timer-container {
@@ -164,6 +183,7 @@ h1 {
     font-size: 50px;
     color: #ff0000;
     min-height: 1.5em;
+    word-wrap: break-word;
 }
 
 #loading {
@@ -182,7 +202,7 @@ h1 {
 }
 
 .progress-container {
-    width: 100%;
+    width: 90%;
     max-width: 400px;
     height: 20px;
     background-color: #000000;
@@ -206,16 +226,18 @@ h1 {
 
 #loading.loaded {
     opacity: 0;
+    pointer-events: none;
 }
 
 footer {
-    position: sticky;
-    bottom: 0;
-    left: 0;
     width: 100%;
+    margin-top: auto;
     text-align: center;
     font-size: 200%;
     color: purple;
-    padding: 10px;
+    padding: 10px 0;
     background-color: black;
+    position: relative;
+    left: -1rem;
+    width: calc(100% + 2rem);
 }
