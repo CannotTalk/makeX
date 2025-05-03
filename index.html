@@ -25,19 +25,14 @@
     </div>
 
     <div id="generate-button-container">
-        <!-- onclick属性を削除 -->
         <button id="generate-button">Generate</button>
     </div>
-
-    <!-- ストップボタンを追加 (初期非表示) -->
     <div id="stop-button-container" style="display: none;">
         <button id="stop-button">Stop</button>
     </div>
 
     <div id="answer-button-container">
-        <!-- onclick属性を削除 -->
         <span id="make10answer"><button id="answer-button">Solution Ex.</button></span>
-        <!-- 回答表示用の要素を追加 (任意ですが推奨) -->
         <div id="solution-display" style="margin-top: 5px;"></div>
     </div>
 </body>
@@ -45,7 +40,6 @@
     <div id="footer">
         <p>&copy; 2025 Make 10 Game By CannotTalk</p>
     </div>
-<!-- スクリプトの読み込み順序に注意 -->
 <script src="scripts/make10.js"></script>
-<script src="scripts/loading.js"></script> <!-- loading.js が make10.js より後の方が良い場合がある -->
+<script src="scripts/loading.js"></script>
 </html>
