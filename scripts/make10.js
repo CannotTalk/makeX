@@ -1,25 +1,25 @@
 // scripts/make10.js
 
-// --- グローバル変数 ---
+// --- Global Variables ---
 let puzzle = null;
 let puzzleAnswer = null;
 let timerInterval = null;
 let startTime = 0;
 let elapsedTime = 0;
 
-// --- DOM要素への参照 ---
+// --- References to DOM Elements ---
 const timerDisplay = document.getElementById('timer');
 const generateButton = document.getElementById('generate-button');
 const stopButtonContainer = document.getElementById('stop-button-container');
 const stopButton = document.getElementById('stop-button');
-const answerButton = document.getElementById('answer-button'); // Solution Ex. ボタン
+const answerButton = document.getElementById('answer-button');
 const numbersDisplay = document.getElementById('numbers');
-const solutionDisplay = document.getElementById('solution-display'); // 解答表示用の要素
+const solutionDisplay = document.getElementById('solution-display');
 
-// --- ヘルパー関数 (提供されたコード) ---
+// --- Helper Functions ---
 
 /**
- * 指定された範囲内のランダムな整数を生成します。
+ * Generates a random integer within the specified range.
  */
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -28,7 +28,7 @@ function getRandomInt(min, max) {
 }
 
 /**
- * 配列をシャッフルします (Fisher-Yatesアルゴリズム)。
+ * Shuffles an array (Fisher-Yates algorithm).
  */
 function shuffleArray(array) {
     const shuffled = array.slice();
@@ -40,7 +40,7 @@ function shuffleArray(array) {
 }
 
 /**
- * 二つの数値と演算子で計算を実行します。
+ * Performs a calculation with two numbers and an operator.
  */
 function calculate(a, b, op) {
     switch (op) {
@@ -55,7 +55,7 @@ function calculate(a, b, op) {
 }
 
 /**
- * 必ず解けるMakeXパズルとその解法の一つを生成する関数
+ * Generates a solvable MakeX puzzle and one of its solutions.
  */
 function generateSolvableMakeXPuzzle() {
     const MAX_ATTEMPTS = 100;
@@ -116,22 +116,19 @@ function generateSolvableMakeXPuzzle() {
         const solutionExpression = currentExpressions[0];
 
         if (Number.isInteger(target) && target > 0) {
-             // Make 10 に限定する場合 (必要ならコメントアウト解除)
-             // if (target === 10) {
-                return {
-                    numbers: initialNumbers,
-                    target: target,
-                    solutionExpression: solutionExpression,
-                };
-             // }
+            return {
+                numbers: initialNumbers,
+                target: target,
+                solutionExpression: solutionExpression,
+            };
         }
     }
-    console.error(`指定回数(${MAX_ATTEMPTS})試行しても適切なパズルを生成できませんでした。`);
+    console.error(`Failed to generate a valid puzzle after ${MAX_ATTEMPTS} attempts.`);
     return null;
 }
 
 /**
- * 数式文字列の一番外側にある不要な括弧を削除します。
+ * Removes unnecessary outer parentheses from an expression string.
  */
 function removeRedundantOuterParentheses(expr) {
     if (typeof expr !== 'string') return expr;
@@ -139,34 +136,31 @@ function removeRedundantOuterParentheses(expr) {
 
     while (expr.startsWith('(') && expr.endsWith(')')) {
         const innerExpr = expr.substring(1, expr.length - 1);
-        if (innerExpr === '') return expr; // Avoid reducing "()" to ""
+        if (innerExpr === '') return expr;
 
         let balance = 0;
         let valid = true;
         for (let i = 0; i < innerExpr.length; i++) {
             if (innerExpr[i] === '(') balance++;
             else if (innerExpr[i] === ')') balance--;
-            // If balance goes negative or ends non-zero inside, outer parens were necessary
             if (balance < 0) {
                  valid = false;
                  break;
             }
         }
-        // Check final balance and validity
         if (balance === 0 && valid) {
-            expr = innerExpr; // Remove outer parentheses and repeat
+            expr = innerExpr;
         } else {
-            break; // Outer parentheses are necessary, stop removing
+            break;
         }
     }
     return expr;
 }
 
-
-// --- タイマー関数 ---
+// --- Timer Functions ---
 
 /**
- * 時間を HH:MM:SS.msms 形式にフォーマットします。
+ * Formats time into HH:MM:SS.msms format.
  */
 function formatTime(milliseconds) {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -178,7 +172,7 @@ function formatTime(milliseconds) {
 }
 
 /**
- * タイマー表示を更新します。
+ * Updates the timer display.
  */
 function updateTimer() {
     const now = Date.now();
@@ -187,7 +181,7 @@ function updateTimer() {
 }
 
 /**
- * タイマーを開始します。
+ * Starts the timer.
  */
 function startTimer() {
     if (timerInterval) {
@@ -196,113 +190,98 @@ function startTimer() {
     startTime = Date.now();
     elapsedTime = 0;
     timerDisplay.textContent = formatTime(0);
-    timerInterval = setInterval(updateTimer, 10); // 10msごとに更新
+    timerInterval = setInterval(updateTimer, 10);
 
-    stopButtonContainer.style.display = 'block'; // ストップボタン表示
-    answerButton.disabled = false; // Solutionボタン有効化
-    answerButton.style.display = 'inline-block'; // Solutionボタン表示
-    solutionDisplay.textContent = ''; // 前回の解答をクリア
+    stopButtonContainer.style.display = 'block';
+    answerButton.disabled = false;
+    answerButton.style.display = 'inline-block';
+    solutionDisplay.textContent = '';
 }
 
 /**
- * タイマーを停止します。
+ * Stops the timer.
  */
 function stopTimer() {
     if (timerInterval) {
         clearInterval(timerInterval);
-        updateTimer(); // 停止時の最終時間を正確に表示
+        updateTimer();
         timerInterval = null;
-        stopButtonContainer.style.display = 'none'; // ストップボタン非表示
-        // 必要に応じてSolutionボタンを無効化したり非表示にする
-        // answerButton.disabled = true;
-        // answerButton.style.display = 'none';
+        stopButtonContainer.style.display = 'none';
     }
 }
 
-// --- メインロジック関数 ---
+// --- Main Logic Functions ---
 
 /**
- * 問題を生成し、表示します。
+ * Generates and displays a puzzle.
  */
 function generateQ() {
     console.log("Generating puzzle...");
-    puzzle = generateSolvableMakeXPuzzle(); // Make 10 にしたい場合は target === 10 のチェックを追加
+    puzzle = generateSolvableMakeXPuzzle();
 
     if (puzzle) {
         console.log("Puzzle generated:", puzzle);
         let nums = puzzle.numbers;
-        // カンマとスペースで数字を結合し、ターゲット数を追加
-        let numsForDisplay = nums.join(' , ') + ` で ${puzzle.target} をつくれ`;
+        let numsForDisplay = nums.join(' , ') + ` to make ${puzzle.target}`;
 
-        // 解答を準備（不要な括弧を削除）
         puzzleAnswer = puzzle.solutionExpression;
-        puzzleAnswer = removeRedundantOuterParentheses(puzzleAnswer); // 繰り返し削除は不要かも？ removeRedundantOuterParentheses内でループする実装にした
+        puzzleAnswer = removeRedundantOuterParentheses(puzzleAnswer);
 
-        // 問題を表示
-        numbersDisplay.textContent = numsForDisplay; // textContent を推奨
+        numbersDisplay.textContent = numsForDisplay;
 
-        // 解答表示エリアをクリアし、解答ボタンを表示状態にする
-        solutionDisplay.textContent = ''; // ここで解答を表示しない
-        answerButton.style.display = 'inline-block'; // 解答ボタンを表示
-        answerButton.disabled = false; // 解答ボタンを有効化
+        solutionDisplay.textContent = '';
+        answerButton.style.display = 'inline-block';
+        answerButton.disabled = false;
 
     } else {
-        console.error("パズルの生成に失敗しました。");
-        numbersDisplay.textContent = "エラー: パズルを生成できませんでした。";
-        puzzleAnswer = null; // 解答もnullに
-        answerButton.style.display = 'none'; // エラー時は解答ボタンを隠す
+        console.error("Failed to generate a puzzle.");
+        numbersDisplay.textContent = "Error: Could not generate a puzzle.";
+        puzzleAnswer = null;
+        answerButton.style.display = 'none';
     }
     console.log("generateQ finished.");
 }
 
 /**
- * 解答を表示します。
+ * Displays the solution.
  */
 function showAnswer() {
     console.log("Showing answer...");
     if (puzzleAnswer) {
-        // 解答を専用の表示エリアに表示
         solutionDisplay.textContent = puzzleAnswer;
-        // 解答を表示したらボタンを隠すなどの処理 (任意)
         answerButton.style.display = 'none';
     } else {
-        console.log("解答が生成されていません。");
-        solutionDisplay.textContent = "解答がありません";
+        console.log("No solution generated.");
+        solutionDisplay.textContent = "No solution available.";
     }
     console.log("Answer displayed.");
 }
 
-
-// --- イベントリスナーの設定 ---
+// --- Event Listeners ---
 
 generateButton.addEventListener('click', () => {
-    generateQ(); // 問題生成
-    // generateQ が成功した場合のみタイマーを開始するなどの制御も可能
+    generateQ();
     if (puzzle) {
-      startTimer(); // タイマースタート
+      startTimer();
     }
 });
 
 stopButton.addEventListener('click', () => {
-    stopTimer(); // タイマーストップ
+    stopTimer();
 });
 
 answerButton.addEventListener('click', () => {
-    showAnswer(); // 解答表示
-    stopTimer();  // タイマーストップ
+    showAnswer();
+    stopTimer();
 });
 
-// --- 初期化処理 ---
+// --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded. Initializing Make 10.");
-    timerDisplay.textContent = formatTime(0); // 初期タイマー表示
-    stopButtonContainer.style.display = 'none'; // ストップボタンを隠す
-    answerButton.style.display = 'none'; // 初期状態では解答ボタンも隠すか無効化
+    timerDisplay.textContent = formatTime(0);
+    stopButtonContainer.style.display = 'none';
+    answerButton.style.display = 'none';
     answerButton.disabled = true;
-    solutionDisplay.textContent = ''; // 解答表示エリアをクリア
-    numbersDisplay.textContent = "? ? ? ?"; // 初期問題表示
-
-    // loading.js が完了したことを検知したい場合は、loading.js側で
-    // カスタムイベントを発火させ、ここでリッスンするなどの方法があります。
-    // 例: window.addEventListener('loadingComplete', initializeMake10);
+    solutionDisplay.textContent = '';
+    numbersDisplay.textContent = "? ? ? ?";
 });
