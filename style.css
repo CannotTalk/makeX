@@ -13,7 +13,7 @@
     src: url('fonts/keifont.ttf') format('truetype');
 }
 
-@font-face{
+@font-face {
     font-family: 'tegakikakutto';
     src: url('fonts/851H-kktt_004.ttf') format('truetype');
 }
@@ -26,8 +26,8 @@
 
 @keyframes ripple-red {
     0% {box-shadow: 0 0 0 0 red;}
-    70% {box-shadow: 0 0 0 1rem rgb(255 0 0 / 0%);}
-    100% {box-shadow: 0 0 0 0 rgb(255 0 0 / 0%);}
+    70% {box-shadow: 0 0 0 1rem rgb(27 133 251 / 0%);}
+    100% {box-shadow: 0 0 0 0 rgb(27 133 251 / 0%);}
 }
 
 body {
@@ -58,7 +58,7 @@ h1 {
     margin-top: 20px;
 }
 
-#generate-button-container{
+#generate-button-container {
     text-align: center;
 }
 
@@ -76,37 +76,34 @@ h1 {
 #generate-button:hover {
     color: black;
     background-color: lime;
-    -webkit-animation: pulse 2s infinite;
     animation: ripple-green 1.5s infinite;
 }
 
-#generate-button:active{
+#generate-button:active {
     scale: 0.99;
 }
 
-#answer-button-container{
+#answer-button-container {
     text-align: center;
 }
 
-
-#answer-button{
+#answer-button {
     background-color: black;
     font-size: 30px;
     font-family: 'cc-ultimatum';
     text-align: center;
     white-space: nowrap;
     color: lime;
-    padding:  0.5rem 10%;
+    padding: 0.5rem 10%;
     margin: 10px;
     border: 4px lime solid;
 }
 
 #answer-button:hover {
-    -webkit-animation: pulse 1s infinite;
     animation: ripple-green 2.5s infinite;
 }
 
-#make10answer{
+#make10answer {
     background-color: black;
     font-size: 50px;
     font-family: 'cc-ultimatum';
@@ -114,23 +111,20 @@ h1 {
     color: red;
     padding: 0.5rem 10%;
     margin: 10px;
-    margin-bottom: 5px; /* ボタンと回答テキストの間にスペース */
+    margin-bottom: 5px;
 }
-
-/* style.css に以下を追加 */
 
 #timer-container {
     text-align: center;
-    font-size: 2em; /* 少し大きく */
+    font-size: 2em;
     margin-bottom: 15px;
-    font-family: 'tegakikakutto', 'cc-ultimatum', serif; /* 等幅フォント変更 */
+    font-family: 'tegakikakutto', 'cc-ultimatum', serif;
     color: lime;
 }
 
 #stop-button-container {
-  text-align: center;
-  margin-top: 10px;
-  /* display: none; はHTMLのインラインスタイルまたはJSで制御 */
+    text-align: center;
+    margin-top: 10px;
 }
 
 #stop-button {
@@ -140,20 +134,17 @@ h1 {
     text-align: center;
     white-space: nowrap;
     color: red;
-    padding:  0.5rem 10%;
+    padding: 0.5rem 25%;
     margin: 10px;
     border: 4px red solid;
-    -webkit-animation: pulse 2s infinite;
-    animation: ripple-red 1.5s infinite;
-    
+    animation: ripple-red 1s infinite;
 }
 
 #stop-button:hover {
-    background-color: red; /* ホバー時少し暗く */
+    background-color: red;
     color: black;
 }
 
-/* ボタンコンテナ間のマージン調整 (任意) */
 #generate-button-container,
 #stop-button-container,
 #answer-button-container {
@@ -161,22 +152,19 @@ h1 {
     text-align: center;
 }
 
-/* 回答表示エリアのスタイル */
 #solution-display {
     text-align: center;
     margin-top: 10px;
     font-size: 50px;
-    color: #ff0000; /* 青色系 */
-    min-height: 1.5em; /* スペース確保 */
+    color: #ff0000;
+    min-height: 1.5em;
 }
 
-/* 回答ボタンをSolution Ex.と回答テキストの間に置きたい場合など調整 */
 #answer-button-container {
-    display: flex; /* 中央揃えにしやすくする */
-    flex-direction: column; /* 縦に並べる */
-    text-align: center; /* 中央揃え */
+    display: flex;
+    flex-direction: column;
+    text-align: center;
 }
-
 
 #loading {
     position: fixed;
@@ -213,7 +201,7 @@ h1 {
 
 #progress-text {
     font-size: 100%;
-    color: black
+    color: black;
 }
 
 #loading.loaded {
