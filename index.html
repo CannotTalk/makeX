@@ -17,42 +17,46 @@
     <!-- Achievement Popup Structure -->
     <div id="achievement-popup" class="achievement-popup hidden">
         <div class="achievement-content">
-        <strong class="achievement-title">The Shortcuts Key Nobody Knows</strong>
-        <p class="achievement-desc">Discover a new shortcut key.</p>
+        <!-- ↓内容はJavaScriptで動的に設定される -->
+        <strong class="achievement-title"></strong>
+        <p class="achievement-desc"></p>
         </div>
     </div>
 
 <main>
     <h1>Welcome to Make X</h1>
-    
+
     <div id="timer-container">
         <span id="timer">00:00:00.00</span>
     </div>
 
     <div id="numbers-container">
-        <span id="numbers">? ? ? ?</span>
+        <!-- 初期表示のフォーマット変更 -->
+        <span id="numbers">? , ? , ? , ? to make ?</span>
     </div>
 
-    <div id="generate-button-container">
-        <button id="generate-button">Generate</button>
-    </div>
-    <div id="stop-button-container" style="display: none;">
-        <button id="stop-button">Stop</button>
+    <!-- Generate/Stopボタン統合 -->
+    <div id="action-button-container">
+        <button id="action-button">Generate</button>
     </div>
 
     <div id="answer-button-container">
-        <span id="make10answer">
-            <button id="answer-button">Solution Ex.</button>
-        </span>
+        <button id="answer-button">Solution Ex.</button>
         <div id="solution-display" style="margin-top: 5px;"></div>
     </div>
 </main>
 </body>
 <footer>
     <div id="footer">
-        <p>&copy; 2025 Make 10 Game By CannotTalk</p>
+        <p>© 2025 Make 10 Game By CannotTalk</p>
     </div>
-<script src="scripts/make10.js"></script>
-<script src="scripts/popup-achievements.js"></script>
+</footer>
+
+<!-- スクリプトの読み込み順序に注意 -->
 <script src="scripts/loading.js"></script>
+<!-- make10.js でグローバル変数を定義するので先に読み込む -->
+<script src="scripts/make10.js"></script>
+<!-- popup-achievements.js は make10.js の要素を参照するので後に読み込む -->
+<script src="scripts/popup-achievements.js"></script>
+
 </html>
