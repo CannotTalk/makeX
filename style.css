@@ -26,14 +26,14 @@
 
 @keyframes ripple-green {
     0% {box-shadow: 0 0 0 0 lime;}
-    70% {box-shadow: 0 0 0 1rem rgb(27 133 251 / 0%);}
-    100% {box-shadow: 0 0 0 0 rgb(27 133 251 / 0%);}
+    70% {box-shadow: 0 0 0 1rem rgba(0, 255, 0, 0);}
+    100% {box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);}
 }
 
 @keyframes ripple-red {
     0% {box-shadow: 0 0 0 0 red;}
-    70% {box-shadow: 0 0 0 1rem rgb(27 133 251 / 0%);}
-    100% {box-shadow: 0 0 0 0 rgb(27 133 251 / 0%);}
+    70% {box-shadow: 0 0 0 1rem rgba(255, 0, 0, 0);}
+    100% {box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);}
 }
 
 body {
@@ -75,6 +75,8 @@ h1 {
 #generate-button-container {
     text-align: center;
     margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
 }
 
 #generate-button,
@@ -93,6 +95,8 @@ h1 {
     border-width: 5px;
     border-style: solid;
     animation: none;
+    position: relative;
+    z-index: 1;
 }
 
 #generate-button {
@@ -162,6 +166,9 @@ h1 {
 #stop-button-container {
     text-align: center;
     margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+    display: none;
 }
 
 #stop-button {
@@ -243,10 +250,10 @@ footer {
 
 .achievement-popup {
     position: fixed;
-    bottom: 0px;
-    right: 0px;
+    bottom: 20px;
+    right: 20px;
     width: 300px;
-    background-color: #000040;
+    background-color: #0e141b;
     color: #dcdedf;
     border-radius: 3px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
