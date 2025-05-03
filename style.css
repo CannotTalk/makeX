@@ -39,11 +39,10 @@
 body {
     font-family: 'cc-ultimatum', 'tegakikakutto', serif;
     font-size: 16px;
-    color: lime;
-    background-color: black;
+    color: #00ff00;
+    background-color: #000000;
     margin: 0;
-    /* padding: 0 1rem; ← 元の設定 */
-    padding: 0 0 0 1rem; /* 右側のパディングを削除 */
+    padding: 0 1rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -54,14 +53,14 @@ main {
 }
 
 h1 {
-    border-left: lime 10px solid;
+    border-left: #00ff00 10px solid;
     padding-left: 1rem;
     font-family: 'cc-ultimatum', serif;
     font-size: 2em;
-    color: lime;
+    color: #00ff00;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-right: 0; /* bodyの右paddingがなくなったので、これも不要なら削除してもよい */
+    margin-right: 0;
 }
 
 #numbers-container {
@@ -71,17 +70,18 @@ h1 {
     align-items: center;
     flex-wrap: wrap;
     margin-top: 20px;
+    min-height: 1.5em; /* 数字が表示されるスペースを確保 */
+    text-align: center; /* 中央揃え */
 }
 
-#generate-button-container {
+#action-button-container { /* generate/stopボタン統合用コンテナ */
     text-align: center;
     margin-bottom: 10px;
     position: relative;
     z-index: 1;
 }
 
-#generate-button,
-#stop-button {
+#action-button { /* generate/stop統合ボタン */
     display: block;
     width: 90%;
     max-width: 500px;
@@ -98,21 +98,34 @@ h1 {
     animation: none;
     position: relative;
     z-index: 1;
+    /* Default: Generate Mode */
+    background-color: #000000;
+    color: #00ff00;
+    border-color: #00ff00;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, scale 0.1s; /* スムーズな切り替え */
 }
 
-#generate-button {
-    background-color: black;
-    color: lime;
-    border-color: lime;
-}
-
-#generate-button:hover {
-    color: black;
-    background-color: lime;
+#action-button:hover:not(.stop-mode) {
+    color: #000000;
+    background-color: #00ff00;
     animation: ripple-green 1.5s infinite;
 }
 
-#generate-button:active {
+#action-button.stop-mode {
+    /* Stop Mode */
+    background-color: #000000;
+    color: #ff0000;
+    border-color: #ff0000;
+    animation: ripple-red 1s infinite; /* Stop時は常時アニメーション */
+}
+
+#action-button.stop-mode:hover {
+    background-color: #ff0000;
+    color: #000000;
+    animation: none; /* ホバー時はアニメーション停止 */
+}
+
+#action-button:active {
     scale: 0.99;
 }
 
@@ -125,35 +138,30 @@ h1 {
 }
 
 #answer-button {
-    background-color: black;
+    background-color: #000000;
     font-size: 30px;
     font-family: 'cc-ultimatum';
     text-align: center;
     white-space: nowrap;
-    color: lime;
+    color: #00ff00;
     padding: 0.5rem 2rem;
     margin: 10px 0;
-    border: 4px lime solid;
+    border: 4px #00ff00 solid;
     width: auto;
     max-width: 100%;
+    transition: background-color 0.2s, color 0.2s; /* ホバー効果用 */
 }
 
-#answer-button:hover {
+#answer-button:hover:not(:disabled) { /* 無効でないときだけホバー効果 */
     animation: ripple-green 2.5s infinite;
+    background-color: #00ff00; /* ホバー時に背景色変更を追加 */
+    color: #000000;
 }
 
-#make10answer {
-    background-color: black;
-    font-size: 50px;
-    font-family: 'cc-ultimatum';
-    text-align: center;
-    color: red;
-    padding: 0.5rem 1rem;
-    margin: 10px 0;
-    margin-bottom: 5px;
-    width: auto;
-    max-width: 100%;
-    word-wrap: break-word;
+#answer-button:disabled { /* 無効時のスタイル */
+    color: #555555;
+    border-color: #555555;
+    cursor: not-allowed;
 }
 
 #timer-container {
@@ -161,36 +169,16 @@ h1 {
     font-size: 2em;
     margin-bottom: 15px;
     font-family: 'tegakikakutto', 'cc-ultimatum', serif;
-    color: lime;
-}
-
-#stop-button-container {
-    text-align: center;
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
-    display: none; /* 初期状態は非表示 */
-}
-
-#stop-button {
-    background-color: black;
-    color: red;
-    border-color: red;
-    animation: ripple-red 1s infinite;
-}
-
-#stop-button:hover {
-    background-color: red;
-    color: black;
+    color: #00ff00;
 }
 
 #solution-display {
     text-align: center;
     margin-top: 10px;
-    font-size: 50px;
+    font-size: 40px; /* 数字表示と合わせるか調整 */
     color: #ff0000;
     min-height: 1.5em;
-    word-wrap: break-word;
+    word-wrap: break-word; /* 長い式が折り返されるように */
 }
 
 #loading {
@@ -228,7 +216,7 @@ h1 {
 
 #progress-text {
     font-size: 100%;
-    color: black;
+    color: #000000;
 }
 
 #loading.loaded {
@@ -237,20 +225,22 @@ h1 {
 }
 
 footer {
-    width: 100%; /* bodyのpadding調整に伴い、widthを100%に戻す */
+    width: 100%;
     margin-top: auto;
     text-align: center;
     font-size: 200%;
-    color: purple;
-    padding: 10px 0; /* 左右のpaddingは不要 */
-    background-color: black;
-    /* position, left, width の調整を削除 */
+    color: #800080;
+    padding: 10px 0;
+    background-color: #000000;
+    position: relative;
+    left: -1rem;
+    width: calc(100% + 2rem);
 }
 
 .achievement-popup {
     position: fixed;
     bottom: 0px;
-    right: 0px; /* bodyの右paddingがなくなったため、これで右端に配置される */
+    right: 0px;
     width: 300px;
     background-color: #000040;
     color: #dcdedf;
